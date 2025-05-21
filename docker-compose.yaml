@@ -12,6 +12,7 @@ services:
          - ./docker/nginx/logs/access.log:/var/log/nginx/access.log
       depends_on:
          - php
+         - api
       networks:
          - app-network
    php:
@@ -56,6 +57,18 @@ services:
       depends_on:
          mysql:
             condition: service_healthy
+      networks:
+         - app-network
+   api:
+      build:
+         context: docker
+         dockerfile: api.dockerfile
+      working_dir: /usr/src/app
+      container_name: api
+      volumes:
+         - ./api/src:/usr/src/app
+      ports:
+         - 8000:8000
       networks:
          - app-network
 networks:
